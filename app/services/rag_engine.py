@@ -6,7 +6,7 @@ class RAGEngine:
     def __init__(self, vector_store: VectorStoreManager):
         self.vector_store = vector_store
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel('gemini-3.5-flash')
 
     def generate_response(self, query: str) -> Dict[str, Any]:
         # Step 1: Retrieval
