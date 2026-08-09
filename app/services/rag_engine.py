@@ -8,7 +8,7 @@ class RAGEngine:
     def __init__(self, vector_store):
         self.vector_store = vector_store
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
-        self.max_context_tokens = 900
+        self.max_context_tokens = 1200  # Context budget slightly expanded
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     def count_tokens(self, text: str) -> int:
@@ -44,10 +44,10 @@ class RAGEngine:
 
             formatted_context = "\n\n".join(context_blocks)
 
-            # Clean Prompt without leakage traps
-            system_prompt = f"""You are a helpful AI assistant.
-Answer the user's query clearly and accurately using ONLY the context provided below.
-If the information is not present in the context, strictly state: "Mujhe provided documents mein is question ka relevant answer nahi mila."
+            system_prompt = f"""You are an accurate corporate AI assistant.
+Provide a clear, direct, and concise summary or answer based strictly on the provided Context.
+Do NOT use outside knowledge.
+If the answer cannot be found in the context, state: "Mujhe provided documents mein is question ka relevant answer nahi mila."
 
 Context:
 {formatted_context}
@@ -55,11 +55,12 @@ Context:
 User Query: {query}
 Answer:"""
 
+            # Increased output token budget to stop response trimming
             response = self.client.models.generate_content(
                 model='gemini-3.5-flash',
                 contents=system_prompt,
                 config={
-                    'max_output_tokens': 600,  # Token limit increased to prevent cutoffs
+                    'max_output_tokens': 1000,
                     'temperature': 0.2
                 }
             )
