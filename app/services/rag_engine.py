@@ -8,7 +8,7 @@ class RAGEngine:
     def __init__(self, vector_store):
         self.vector_store = vector_store
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
-        self.max_context_tokens = 1200  # Context budget slightly expanded
+        self.max_context_tokens = 25000  # Context budget slightly expanded
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     def count_tokens(self, text: str) -> int:
@@ -16,7 +16,7 @@ class RAGEngine:
 
     def generate_response(self, query: str) -> Dict[str, Any]:
         try:
-            search_results = self.vector_store.similarity_search(query, top_k=3)
+            search_results = self.vector_store.similarity_search(query, top_k=5)
             
             retrieved_texts = search_results.get('documents', [[]])[0]
             retrieved_meta = search_results.get('metadatas', [[]])[0]
