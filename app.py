@@ -321,7 +321,7 @@ current_session = st.session_state.sessions[active_id]
 
 # Header
 st.markdown(f"<h3 style='margin-bottom: 0px;'>{current_session['title']}</h3>", unsafe_allow_html=True)
-st.caption("Powered by ChromaDB Vector Search & Gemini 1.5 Flash Grounding")
+st.caption("Powered by ChromaDB Vector Search & Gemini 3.5 Flash Grounding")
 st.markdown("---")
 
 # Render active session messages
